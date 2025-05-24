@@ -23,4 +23,4 @@ Easily select and receive dates in both Persian and Gregorian formats — with d
 Install using npm or yarn:
 
 ```bash
-npm install mobile-date-picker
+npm install daliry-mobile-date-picker

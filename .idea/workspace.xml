@@ -743,13 +743,13 @@
       <change afterPath="$PROJECT_DIR$/node_modules/scheduler/umd/scheduler.profiling.min.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/node_modules/scheduler/unstable_mock.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/node_modules/scheduler/unstable_post_task.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/MobileDatePicker.tsx" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/mobileDatePicker.css" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -803,7 +803,7 @@
       <option name="presentableId" value="Default" />
       <updated>1742207395356</updated>
       <workItem from="1742207396466" duration="9930000" />
-      <workItem from="1748083800865" duration="5710000" />
+      <workItem from="1748083800865" duration="5876000" />
     </task>
     <servers />
   </component>
