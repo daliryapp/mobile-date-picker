@@ -1,5 +1,5 @@
 {
-  "name": "mobile-date-picker",
+  "name": "daliry-mobile-date-picker",
   "version": "1.0.0",
   "packageManager": "yarn@4.5.2",
   "main": "dist/index.js",
