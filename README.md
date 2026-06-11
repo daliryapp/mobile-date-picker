@@ -3,7 +3,7 @@
 **Daliry Mobile Date Picker** is a mobile-friendly and fully customizable date picker component for **React 19** that supports both **Jalali (Shamsi)** and **Gregorian** calendars.  
 Perfect for **mobile apps**, **birthdate pickers**, and any React project that needs a clean, touch-optimized date selection experience.
 
-![Daliry Mobile Date Picker Screenshot](https://raw.githubusercontent.com/daliryapp/mobile-date-picker/refs/heads/master/src/assets/images/daliry-mobile-date-picker.PNG)
+![Daliry Mobile Date Picker Screenshot](https://github.com/daliryapp/mobile-date-picker/blob/master/src/assets/images/daliry-mobile-date-picker102.PNG?raw=true)
 
 ---
 
