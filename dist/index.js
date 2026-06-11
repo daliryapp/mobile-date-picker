@@ -211,7 +211,7 @@ var require_moment = __commonJS({
         }
         return to2;
       }
-      function Moment2(config) {
+      function Moment(config) {
         copyConfig(this, config);
         this._d = new Date(config._d != null ? config._d.getTime() : NaN);
         if (!this.isValid()) {
@@ -224,7 +224,7 @@ var require_moment = __commonJS({
         }
       }
       function isMoment(obj) {
-        return obj instanceof Moment2 || obj != null && obj._isAMomentObject != null;
+        return obj instanceof Moment || obj != null && obj._isAMomentObject != null;
       }
       function warn(msg) {
         if (hooks.suppressDeprecationWarnings === false && typeof console !== "undefined" && console.warn) {
@@ -2129,7 +2129,7 @@ var require_moment = __commonJS({
         configFromArray(config);
       }
       function createFromConfig(config) {
-        var res = new Moment2(checkOverflow(prepareConfig(config)));
+        var res = new Moment(checkOverflow(prepareConfig(config)));
         if (res._nextDay) {
           res.add(1, "d");
           res._nextDay = void 0;
@@ -2146,7 +2146,7 @@ var require_moment = __commonJS({
           config._i = input = config._locale.preparse(input);
         }
         if (isMoment(input)) {
-          return new Moment2(checkOverflow(input));
+          return new Moment(checkOverflow(input));
         } else if (isDate(input)) {
           config._d = input;
         } else if (isArray(format2)) {
@@ -2291,13 +2291,13 @@ var require_moment = __commonJS({
         return createDuration(NaN);
       }
       function Duration(duration) {
-        var normalizedInput = normalizeObjectUnits(duration), years3 = normalizedInput.year || 0, quarters = normalizedInput.quarter || 0, months2 = normalizedInput.month || 0, weeks2 = normalizedInput.week || normalizedInput.isoWeek || 0, days3 = normalizedInput.day || 0, hours2 = normalizedInput.hour || 0, minutes2 = normalizedInput.minute || 0, seconds2 = normalizedInput.second || 0, milliseconds2 = normalizedInput.millisecond || 0;
+        var normalizedInput = normalizeObjectUnits(duration), years2 = normalizedInput.year || 0, quarters = normalizedInput.quarter || 0, months2 = normalizedInput.month || 0, weeks2 = normalizedInput.week || normalizedInput.isoWeek || 0, days2 = normalizedInput.day || 0, hours2 = normalizedInput.hour || 0, minutes2 = normalizedInput.minute || 0, seconds2 = normalizedInput.second || 0, milliseconds2 = normalizedInput.millisecond || 0;
         this._isValid = isDurationValid(normalizedInput);
         this._milliseconds = +milliseconds2 + seconds2 * 1e3 + // 1000
         minutes2 * 6e4 + // 1000 * 60
         hours2 * 1e3 * 60 * 60;
-        this._days = +days3 + weeks2 * 7;
-        this._months = +months2 + quarters * 3 + years3 * 12;
+        this._days = +days2 + weeks2 * 7;
+        this._months = +months2 + quarters * 3 + years2 * 12;
         this._data = {};
         this._locale = getLocale();
         this._bubble();
@@ -2585,7 +2585,7 @@ var require_moment = __commonJS({
         };
       }
       function addSubtract(mom, duration, isAdding, updateOffset) {
-        var milliseconds2 = duration._milliseconds, days3 = absRound(duration._days), months2 = absRound(duration._months);
+        var milliseconds2 = duration._milliseconds, days2 = absRound(duration._days), months2 = absRound(duration._months);
         if (!mom.isValid()) {
           return;
         }
@@ -2593,14 +2593,14 @@ var require_moment = __commonJS({
         if (months2) {
           setMonth(mom, get(mom, "Month") + months2 * isAdding);
         }
-        if (days3) {
-          set$1(mom, "Date", get(mom, "Date") + days3 * isAdding);
+        if (days2) {
+          set$1(mom, "Date", get(mom, "Date") + days2 * isAdding);
         }
         if (milliseconds2) {
           mom._d.setTime(mom._d.valueOf() + milliseconds2 * isAdding);
         }
         if (updateOffset) {
-          hooks.updateOffset(mom, days3 || months2);
+          hooks.updateOffset(mom, days2 || months2);
         }
       }
       var add = createAdder(1, "add"), subtract = createAdder(-1, "subtract");
@@ -2690,7 +2690,7 @@ var require_moment = __commonJS({
         );
       }
       function clone() {
-        return new Moment2(this);
+        return new Moment(this);
       }
       function isAfter(input, units) {
         var localInput = isMoment(input) ? input : createLocal(input);
@@ -3463,7 +3463,7 @@ var require_moment = __commonJS({
       function getZoneName() {
         return this._isUTC ? "Coordinated Universal Time" : "";
       }
-      var proto = Moment2.prototype;
+      var proto = Moment.prototype;
       proto.add = add;
       proto.calendar = calendar$1;
       proto.clone = clone;
@@ -3735,10 +3735,10 @@ var require_moment = __commonJS({
         }
       }
       function bubble() {
-        var milliseconds2 = this._milliseconds, days3 = this._days, months2 = this._months, data = this._data, seconds2, minutes2, hours2, years3, monthsFromDays;
-        if (!(milliseconds2 >= 0 && days3 >= 0 && months2 >= 0 || milliseconds2 <= 0 && days3 <= 0 && months2 <= 0)) {
-          milliseconds2 += absCeil(monthsToDays(months2) + days3) * 864e5;
-          days3 = 0;
+        var milliseconds2 = this._milliseconds, days2 = this._days, months2 = this._months, data = this._data, seconds2, minutes2, hours2, years2, monthsFromDays;
+        if (!(milliseconds2 >= 0 && days2 >= 0 && months2 >= 0 || milliseconds2 <= 0 && days2 <= 0 && months2 <= 0)) {
+          milliseconds2 += absCeil(monthsToDays(months2) + days2) * 864e5;
+          days2 = 0;
           months2 = 0;
         }
         data.milliseconds = milliseconds2 % 1e3;
@@ -3748,19 +3748,19 @@ var require_moment = __commonJS({
         data.minutes = minutes2 % 60;
         hours2 = absFloor(minutes2 / 60);
         data.hours = hours2 % 24;
-        days3 += absFloor(hours2 / 24);
-        monthsFromDays = absFloor(daysToMonths(days3));
+        days2 += absFloor(hours2 / 24);
+        monthsFromDays = absFloor(daysToMonths(days2));
         months2 += monthsFromDays;
-        days3 -= absCeil(monthsToDays(monthsFromDays));
-        years3 = absFloor(months2 / 12);
+        days2 -= absCeil(monthsToDays(monthsFromDays));
+        years2 = absFloor(months2 / 12);
         months2 %= 12;
-        data.days = days3;
+        data.days = days2;
         data.months = months2;
-        data.years = years3;
+        data.years = years2;
         return this;
       }
-      function daysToMonths(days3) {
-        return days3 * 4800 / 146097;
+      function daysToMonths(days2) {
+        return days2 * 4800 / 146097;
       }
       function monthsToDays(months2) {
         return months2 * 146097 / 4800;
@@ -3769,11 +3769,11 @@ var require_moment = __commonJS({
         if (!this.isValid()) {
           return NaN;
         }
-        var days3, months2, milliseconds2 = this._milliseconds;
+        var days2, months2, milliseconds2 = this._milliseconds;
         units = normalizeUnits(units);
         if (units === "month" || units === "quarter" || units === "year") {
-          days3 = this._days + milliseconds2 / 864e5;
-          months2 = this._months + daysToMonths(days3);
+          days2 = this._days + milliseconds2 / 864e5;
+          months2 = this._months + daysToMonths(days2);
           switch (units) {
             case "month":
               return months2;
@@ -3783,21 +3783,21 @@ var require_moment = __commonJS({
               return months2 / 12;
           }
         } else {
-          days3 = this._days + Math.round(monthsToDays(this._months));
+          days2 = this._days + Math.round(monthsToDays(this._months));
           switch (units) {
             case "week":
-              return days3 / 7 + milliseconds2 / 6048e5;
+              return days2 / 7 + milliseconds2 / 6048e5;
             case "day":
-              return days3 + milliseconds2 / 864e5;
+              return days2 + milliseconds2 / 864e5;
             case "hour":
-              return days3 * 24 + milliseconds2 / 36e5;
+              return days2 * 24 + milliseconds2 / 36e5;
             case "minute":
-              return days3 * 1440 + milliseconds2 / 6e4;
+              return days2 * 1440 + milliseconds2 / 6e4;
             case "second":
-              return days3 * 86400 + milliseconds2 / 1e3;
+              return days2 * 86400 + milliseconds2 / 1e3;
             // Math.floor prevents floating point math errors here
             case "millisecond":
-              return Math.floor(days3 * 864e5) + milliseconds2;
+              return Math.floor(days2 * 864e5) + milliseconds2;
             default:
               throw new Error("Unknown unit " + units);
           }
@@ -3821,7 +3821,7 @@ var require_moment = __commonJS({
           return this.isValid() ? this._data[name] : NaN;
         };
       }
-      var milliseconds = makeGetter("milliseconds"), seconds = makeGetter("seconds"), minutes = makeGetter("minutes"), hours = makeGetter("hours"), days2 = makeGetter("days"), months = makeGetter("months"), years2 = makeGetter("years");
+      var milliseconds = makeGetter("milliseconds"), seconds = makeGetter("seconds"), minutes = makeGetter("minutes"), hours = makeGetter("hours"), days = makeGetter("days"), months = makeGetter("months"), years = makeGetter("years");
       function weeks() {
         return absFloor(this.days() / 7);
       }
@@ -3845,11 +3845,11 @@ var require_moment = __commonJS({
         return locale2.relativeTime(number || 1, !!withoutSuffix, string, isFuture);
       }
       function relativeTime$1(posNegDuration, withoutSuffix, thresholds2, locale2) {
-        var duration = createDuration(posNegDuration).abs(), seconds2 = round(duration.as("s")), minutes2 = round(duration.as("m")), hours2 = round(duration.as("h")), days3 = round(duration.as("d")), months2 = round(duration.as("M")), weeks2 = round(duration.as("w")), years3 = round(duration.as("y")), a = seconds2 <= thresholds2.ss && ["s", seconds2] || seconds2 < thresholds2.s && ["ss", seconds2] || minutes2 <= 1 && ["m"] || minutes2 < thresholds2.m && ["mm", minutes2] || hours2 <= 1 && ["h"] || hours2 < thresholds2.h && ["hh", hours2] || days3 <= 1 && ["d"] || days3 < thresholds2.d && ["dd", days3];
+        var duration = createDuration(posNegDuration).abs(), seconds2 = round(duration.as("s")), minutes2 = round(duration.as("m")), hours2 = round(duration.as("h")), days2 = round(duration.as("d")), months2 = round(duration.as("M")), weeks2 = round(duration.as("w")), years2 = round(duration.as("y")), a = seconds2 <= thresholds2.ss && ["s", seconds2] || seconds2 < thresholds2.s && ["ss", seconds2] || minutes2 <= 1 && ["m"] || minutes2 < thresholds2.m && ["mm", minutes2] || hours2 <= 1 && ["h"] || hours2 < thresholds2.h && ["hh", hours2] || days2 <= 1 && ["d"] || days2 < thresholds2.d && ["dd", days2];
         if (thresholds2.w != null) {
           a = a || weeks2 <= 1 && ["w"] || weeks2 < thresholds2.w && ["ww", weeks2];
         }
-        a = a || months2 <= 1 && ["M"] || months2 < thresholds2.M && ["MM", months2] || years3 <= 1 && ["y"] || ["yy", years3];
+        a = a || months2 <= 1 && ["M"] || months2 < thresholds2.M && ["MM", months2] || years2 <= 1 && ["y"] || ["yy", years2];
         a[2] = withoutSuffix;
         a[3] = +posNegDuration > 0;
         a[4] = locale2;
@@ -3911,7 +3911,7 @@ var require_moment = __commonJS({
         if (!this.isValid()) {
           return this.localeData().invalidDate();
         }
-        var seconds2 = abs$1(this._milliseconds) / 1e3, days3 = abs$1(this._days), months2 = abs$1(this._months), minutes2, hours2, years3, s, total = this.asSeconds(), totalSign, ymSign, daysSign, hmsSign;
+        var seconds2 = abs$1(this._milliseconds) / 1e3, days2 = abs$1(this._days), months2 = abs$1(this._months), minutes2, hours2, years2, s, total = this.asSeconds(), totalSign, ymSign, daysSign, hmsSign;
         if (!total) {
           return "P0D";
         }
@@ -3919,14 +3919,14 @@ var require_moment = __commonJS({
         hours2 = absFloor(minutes2 / 60);
         seconds2 %= 60;
         minutes2 %= 60;
-        years3 = absFloor(months2 / 12);
+        years2 = absFloor(months2 / 12);
         months2 %= 12;
         s = seconds2 ? seconds2.toFixed(3).replace(/\.?0+$/, "") : "";
         totalSign = total < 0 ? "-" : "";
         ymSign = sign(this._months) !== sign(total) ? "-" : "";
         daysSign = sign(this._days) !== sign(total) ? "-" : "";
         hmsSign = sign(this._milliseconds) !== sign(total) ? "-" : "";
-        return totalSign + "P" + (years3 ? ymSign + years3 + "Y" : "") + (months2 ? ymSign + months2 + "M" : "") + (days3 ? daysSign + days3 + "D" : "") + (hours2 || minutes2 || seconds2 ? "T" : "") + (hours2 ? hmsSign + hours2 + "H" : "") + (minutes2 ? hmsSign + minutes2 + "M" : "") + (seconds2 ? hmsSign + s + "S" : "");
+        return totalSign + "P" + (years2 ? ymSign + years2 + "Y" : "") + (months2 ? ymSign + months2 + "M" : "") + (days2 ? daysSign + days2 + "D" : "") + (hours2 || minutes2 || seconds2 ? "T" : "") + (hours2 ? hmsSign + hours2 + "H" : "") + (minutes2 ? hmsSign + minutes2 + "M" : "") + (seconds2 ? hmsSign + s + "S" : "");
       }
       var proto$2 = Duration.prototype;
       proto$2.isValid = isValid$1;
@@ -3951,10 +3951,10 @@ var require_moment = __commonJS({
       proto$2.seconds = seconds;
       proto$2.minutes = minutes;
       proto$2.hours = hours;
-      proto$2.days = days2;
+      proto$2.days = days;
       proto$2.weeks = weeks;
       proto$2.months = months;
-      proto$2.years = years2;
+      proto$2.years = years;
       proto$2.humanize = humanize;
       proto$2.toISOString = toISOString$1;
       proto$2.toString = toISOString$1;
@@ -5177,97 +5177,125 @@ var require_moment_jalaali = __commonJS({
 
 // src/MobileDatePicker.tsx
 var import_moment_jalaali = __toESM(require_moment_jalaali());
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { jsx, jsxs } from "react/jsx-runtime";
-var jalaliMonths = [
-  "",
-  "\u0641\u0631\u0648\u0631\u062F\u06CC\u0646",
-  "\u0627\u0631\u062F\u06CC\u0628\u0647\u0634\u062A",
-  "\u062E\u0631\u062F\u0627\u062F",
-  "\u062A\u06CC\u0631",
-  "\u0645\u0631\u062F\u0627\u062F",
-  "\u0634\u0647\u0631\u06CC\u0648\u0631",
-  "\u0645\u0647\u0631",
-  "\u0622\u0628\u0627\u0646",
-  "\u0622\u0630\u0631",
-  "\u062F\u06CC",
-  "\u0628\u0647\u0645\u0646",
-  "\u0627\u0633\u0641\u0646\u062F",
-  ""
-];
-var years = Array.from({ length: 1308 }, (_, i) => 1308 + i);
-var days = Array.from({ length: 33 }, (_, i) => i);
-var MobileDatePicker = ({ onDateChange, isBirthdate = false }) => {
-  const today = (0, import_moment_jalaali.default)();
-  const [selectedYear, setSelectedYear] = useState(isBirthdate ? 1388 : today.jYear() - 1);
-  const [selectedMonth, setSelectedMonth] = useState(isBirthdate ? 6 : today.jMonth());
-  const [selectedDay, setSelectedDay] = useState(isBirthdate ? 2 : today.jDate() - 1);
-  const listRef = useRef(null);
-  const listRefMonths = useRef(null);
-  const listRefDays = useRef(null);
-  const selectDateFunction = () => {
-    const gDate = (0, import_moment_jalaali.default)(`${selectedYear}-${selectedMonth}-${selectedDay}`, "jYYYY-jMM-jDD").format("YYYY-MM-DD");
-    onDateChange({
-      jYear: selectedYear,
-      jMonth: selectedMonth,
-      jDay: selectedDay,
-      jDate: `${selectedYear}-${selectedMonth}-${selectedDay}`,
-      date: gDate,
-      gDate,
-      moment: (0, import_moment_jalaali.default)(`${selectedYear}-${selectedMonth}-${selectedDay}`, "jYYYY-jMM-jDD")
-    });
+var JALALI_MONTHS = ["\u0641\u0631\u0648\u0631\u062F\u06CC\u0646", "\u0627\u0631\u062F\u06CC\u0628\u0647\u0634\u062A", "\u062E\u0631\u062F\u0627\u062F", "\u062A\u06CC\u0631", "\u0645\u0631\u062F\u0627\u062F", "\u0634\u0647\u0631\u06CC\u0648\u0631", "\u0645\u0647\u0631", "\u0622\u0628\u0627\u0646", "\u0622\u0630\u0631", "\u062F\u06CC", "\u0628\u0647\u0645\u0646", "\u0627\u0633\u0641\u0646\u062F"];
+var GREGORIAN_MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+var ITEM_HEIGHT = 45;
+var DaliryMobileDatePicker = ({
+  onDateChange,
+  isBirthdate = false,
+  isGregorian = false,
+  backgroundColor = "#f5f5f5",
+  textColor = "#bbb",
+  selectedColor = "#333"
+}) => {
+  const now = (0, import_moment_jalaali.default)();
+  const initialYear = useMemo(() => {
+    const currentYear = isGregorian ? now.year() : now.jYear();
+    return isBirthdate ? currentYear - 18 : currentYear;
+  }, [isGregorian, isBirthdate]);
+  const initialMonth = isGregorian ? now.month() + 1 : now.jMonth() + 1;
+  const initialDay = isGregorian ? now.date() : now.jDate();
+  const [selectedYear, setSelectedYear] = useState(initialYear);
+  const [selectedMonth, setSelectedMonth] = useState(initialMonth);
+  const [selectedDay, setSelectedDay] = useState(initialDay);
+  const yearRef = useRef(null);
+  const monthRef = useRef(null);
+  const dayRef = useRef(null);
+  const months = isGregorian ? GREGORIAN_MONTHS : JALALI_MONTHS;
+  const years = useMemo(() => {
+    const start = isGregorian ? 1930 : 1300;
+    const end = (isGregorian ? now.year() : now.jYear()) + 20;
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  }, [isGregorian, now]);
+  const daysInMonth = useMemo(() => {
+    if (isGregorian) {
+      return (0, import_moment_jalaali.default)(`${selectedYear}-${selectedMonth}-01`, "YYYY-M-DD").daysInMonth();
+    }
+    return import_moment_jalaali.default.jDaysInMonth(selectedYear, selectedMonth - 1);
+  }, [isGregorian, selectedYear, selectedMonth]);
+  const days = useMemo(() => {
+    return Array.from({ length: daysInMonth }, (_, i) => i + 1);
+  }, [daysInMonth]);
+  useEffect(() => {
+    if (selectedDay > daysInMonth) {
+      setSelectedDay(daysInMonth);
+    }
+  }, [selectedDay, daysInMonth]);
+  const buildDateObject = (year, month, day) => {
+    const m = isGregorian ? (0, import_moment_jalaali.default)(`${year}-${month}-${day}`, "YYYY-M-D") : (0, import_moment_jalaali.default)(`${year}-${month}-${day}`, "jYYYY-jM-jD");
+    return {
+      year,
+      month,
+      day,
+      formatted: isGregorian ? m.format("YYYY/MM/DD") : m.format("jYYYY/jMM/jDD"),
+      date: m.format("YYYY-MM-DD"),
+      gDate: m.format("YYYY-MM-DD"),
+      moment: m
+    };
   };
   useEffect(() => {
-    if (isBirthdate) selectDateFunction();
-  }, [selectedYear, selectedMonth, selectedDay]);
+    const timer = setTimeout(() => {
+      onDateChange(buildDateObject(selectedYear, selectedMonth, selectedDay));
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [selectedYear, selectedMonth, selectedDay, isGregorian]);
+  const scrollToIndex = (ref, index) => {
+    if (ref.current) {
+      ref.current.scrollTop = index * ITEM_HEIGHT;
+    }
+  };
   useEffect(() => {
-    listRef.current?.scrollTo({ top: years.indexOf(selectedYear) * 45, behavior: "smooth" });
-    listRefMonths.current?.scrollTo({ top: selectedMonth * 45, behavior: "smooth" });
-    listRefDays.current?.scrollTo({ top: selectedDay * 45, behavior: "smooth" });
-  }, []);
-  const handleScroll = () => {
-    const index = Math.round((listRef.current?.scrollTop || 0) / 45);
-    setSelectedYear(years[index + 1]);
+    const monthIndex = Math.max(0, selectedMonth - 1);
+    const dayIndex = Math.max(0, selectedDay - 1);
+    const yearIndex = Math.max(0, years.indexOf(selectedYear));
+    const timer = window.setTimeout(() => {
+      scrollToIndex(dayRef, dayIndex);
+      scrollToIndex(monthRef, monthIndex);
+      scrollToIndex(yearRef, yearIndex);
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [years]);
+  const handleScroll = (e, type) => {
+    const index = Math.round(e.currentTarget.scrollTop / ITEM_HEIGHT);
+    if (type === "day") {
+      const nextDay = days[index];
+      if (nextDay && nextDay !== selectedDay) setSelectedDay(nextDay);
+    } else if (type === "month") {
+      const nextMonth = index + 1;
+      if (nextMonth >= 1 && nextMonth <= 12 && nextMonth !== selectedMonth) setSelectedMonth(nextMonth);
+    } else {
+      const nextYear = years[index];
+      if (nextYear && nextYear !== selectedYear) setSelectedYear(nextYear);
+    }
   };
-  const handleScrollMonths = () => {
-    const index = Math.round((listRefMonths.current?.scrollTop || 0) / 45);
-    setSelectedMonth(index + 1);
+  const renderList = (items, selectedValue, ref, type) => {
+    return /* @__PURE__ */ jsxs("div", { className: "scroll-list", onScroll: (e) => handleScroll(e, type), ref, children: [
+      /* @__PURE__ */ jsx("div", { style: { height: ITEM_HEIGHT } }),
+      items.map((item, index) => {
+        const isSelected = type === "month" ? index + 1 === selectedMonth : item === selectedValue;
+        return /* @__PURE__ */ jsx(
+          "div",
+          {
+            className: `scroll-item ${isSelected ? "selected" : ""}`,
+            style: { color: isSelected ? selectedColor : textColor },
+            children: item
+          },
+          `${type}-${item}`
+        );
+      }),
+      /* @__PURE__ */ jsx("div", { style: { height: ITEM_HEIGHT } })
+    ] });
   };
-  const handleScrollDays = () => {
-    const index = Math.round((listRefDays.current?.scrollTop || 0) / 45);
-    setSelectedDay(index + 1);
-  };
-  return /* @__PURE__ */ jsxs("div", { className: "datepicker-container", children: [
-    /* @__PURE__ */ jsxs("div", { className: "scroll-lists", children: [
-      /* @__PURE__ */ jsx("div", { className: "scroll-list", onScroll: handleScrollDays, ref: listRefDays, children: days.map((day, i) => /* @__PURE__ */ jsx(
-        "div",
-        {
-          className: `scroll-item ${day === selectedDay ? "selected" : ""}`,
-          children: day
-        },
-        i
-      )) }),
-      /* @__PURE__ */ jsx("div", { className: "scroll-list", onScroll: handleScrollMonths, ref: listRefMonths, children: jalaliMonths.map((month, i) => /* @__PURE__ */ jsx(
-        "div",
-        {
-          className: `scroll-item ${i === selectedMonth ? "selected" : ""}`,
-          children: month
-        },
-        i
-      )) }),
-      /* @__PURE__ */ jsx("div", { className: "scroll-list", onScroll: handleScroll, ref: listRef, children: years.map((year) => /* @__PURE__ */ jsx(
-        "div",
-        {
-          className: `scroll-item ${year === selectedYear ? "selected" : ""}`,
-          children: year
-        },
-        year
-      )) })
-    ] }),
-    !isBirthdate && /* @__PURE__ */ jsx("button", { className: "apply-button", onClick: selectDateFunction, children: "\u0627\u0639\u0645\u0627\u0644 \u062A\u0627\u0631\u06CC\u062E" })
-  ] });
+  return /* @__PURE__ */ jsx("div", { className: "datepicker-container", children: /* @__PURE__ */ jsxs("div", { className: "scroll-lists", style: { backgroundColor }, children: [
+    renderList(days, selectedDay, dayRef, "day"),
+    renderList(months, months[selectedMonth - 1], monthRef, "month"),
+    renderList(years, selectedYear, yearRef, "year"),
+    /* @__PURE__ */ jsx("div", { className: "selection-highlight", style: { top: ITEM_HEIGHT, height: ITEM_HEIGHT } })
+  ] }) });
 };
-var MobileDatePicker_default = MobileDatePicker;
+var MobileDatePicker_default = DaliryMobileDatePicker;
 export {
   MobileDatePicker_default as default
 };

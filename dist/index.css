@@ -3,24 +3,28 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
   width: 100%;
+  min-width: 350px;
+  user-select: none;
+  padding: 10px;
 }
 .scroll-lists {
   display: flex;
   justify-content: space-between;
-  background-color: #f5f5f5;
   border-radius: 12px;
-  height: 152px;
+  height: 135px;
   width: 100%;
+  position: relative;
+  overflow: hidden;
 }
 .scroll-list {
-  width: 110px;
-  height: 152px;
+  flex: 1;
+  height: 135px;
   overflow-y: auto;
   scroll-snap-type: y mandatory;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  z-index: 2;
 }
 .scroll-list::-webkit-scrollbar {
   display: none;
@@ -30,25 +34,40 @@
   line-height: 45px;
   text-align: center;
   scroll-snap-align: center;
-  color: #bbb;
-  font-size: 16px;
-  opacity: 0.5;
-  filter: blur(4px);
-  font-weight: normal;
+  font-size: 19px;
+  opacity: 0.4;
+  filter: blur(2px);
+  transform: scale(0.8);
 }
 .scroll-item.selected {
-  color: #333;
-  font-size: 20px;
   font-weight: bold;
   opacity: 1;
   filter: none;
+  transform: scale(1);
+  transition: all 0.1s ease;
+}
+.selection-highlight {
+  position: absolute;
+  top: 45px;
+  left: 10px;
+  right: 10px;
+  height: 45px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  pointer-events: none;
+  z-index: 1;
 }
 .apply-button {
-  padding: 10px 20px;
-  background-color: #1976d2;
-  color: white;
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px;
   border: none;
   border-radius: 8px;
   font-size: 16px;
+  font-weight: bold;
   cursor: pointer;
+  transition: opacity 0.2s;
+}
+.apply-button:active {
+  opacity: 0.8;
 }
