@@ -1,7 +1,21 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { RefObject, UIEvent } from "react";
-import moment from "moment-jalaali";
-import type { Moment } from "moment";
+import {
+    getYear,
+    getMonth,
+    getDate,
+    getDaysInMonth,
+    format as formatGregorian
+} from 'date-fns';
+
+import {
+    getYear as getJalaliYear,
+    getMonth as getJalaliMonth,
+    getDate as getJalaliDate,
+    getDaysInMonth as getJalaliDaysInMonth,
+    newDate,
+    format as formatJalali,
+} from 'date-fns-jalali';
 import "./mobileDatePicker.css";
 
 export interface IDate {
@@ -11,7 +25,7 @@ export interface IDate {
     formatted: string;
     date: string;
     gDate: string;
-    moment: Moment;
+    dateObj: Date;
 }
 
 interface IMobileDatePicker {
@@ -36,15 +50,15 @@ const DaliryMobileDatePicker = ({
                               textColor = "#bbb",
                               selectedColor = "#333",
                           }: IMobileDatePicker) => {
-    const now = moment();
+    const now = useMemo(() => new Date(), []);
 
     const initialYear = useMemo(() => {
-        const currentYear = isGregorian ? now.year() : now.jYear();
+        const currentYear = isGregorian ? getYear(now) : getJalaliYear(now);
         return isBirthdate ? currentYear - 18 : currentYear;
     }, [isGregorian, isBirthdate]);
 
-    const initialMonth = isGregorian ? now.month() + 1 : now.jMonth() + 1;
-    const initialDay = isGregorian ? now.date() : now.jDate();
+    const initialMonth = isGregorian ? getMonth(now) + 1 : getJalaliMonth(now) + 1;
+    const initialDay = isGregorian ? getDate(now) : getJalaliDate(now);
 
     const [selectedYear, setSelectedYear] = useState<number>(initialYear);
     const [selectedMonth, setSelectedMonth] = useState<number>(initialMonth);
@@ -58,15 +72,15 @@ const DaliryMobileDatePicker = ({
 
     const years = useMemo(() => {
         const start = isGregorian ? 1930 : 1300;
-        const end = (isGregorian ? now.year() : now.jYear()) + 20;
+        const end = (isGregorian ? getYear(now) : getJalaliYear(now)) + 20;
         return Array.from({ length: end - start + 1 }, (_, i) => start + i);
     }, [isGregorian, now]);
 
     const daysInMonth = useMemo(() => {
         if (isGregorian) {
-            return moment(`${selectedYear}-${selectedMonth}-01`, "YYYY-M-DD").daysInMonth();
+            return  getDaysInMonth(new Date(selectedYear, selectedMonth - 1, 1));
         }
-        return moment.jDaysInMonth(selectedYear, selectedMonth - 1);
+        return  getJalaliDaysInMonth(newDate(selectedYear, selectedMonth-1, 1));
     }, [isGregorian, selectedYear, selectedMonth]);
 
     const days = useMemo(() => {
@@ -81,17 +95,19 @@ const DaliryMobileDatePicker = ({
 
     const buildDateObject = (year: number, month: number, day: number): IDate => {
         const m = isGregorian
-            ? moment(`${year}-${month}-${day}`, "YYYY-M-D")
-            : moment(`${year}-${month}-${day}`, "jYYYY-jM-jD");
+            ? new Date(year, month - 1, day)
+            : newDate(year, month - 1, day);
 
         return {
             year,
             month,
             day,
-            formatted: isGregorian ? m.format("YYYY/MM/DD") : m.format("jYYYY/jMM/jDD"),
-            date: m.format("YYYY-MM-DD"),
-            gDate: m.format("YYYY-MM-DD"),
-            moment: m,
+            formatted: isGregorian
+                ? formatGregorian(m, 'yyyy/MM/dd')
+                : formatJalali(m, 'yyyy/MM/dd'),
+            date: formatGregorian(m, 'yyyy-MM-dd'),
+            gDate: formatGregorian(m, 'yyyy-MM-dd'),
+            dateObj: m,
         };
     };
 

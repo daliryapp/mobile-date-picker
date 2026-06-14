@@ -1,4 +1,3 @@
-import type { Moment } from "moment";
 import "./mobileDatePicker.css";
 export interface IDate {
     year: number;
@@ -7,7 +6,7 @@ export interface IDate {
     formatted: string;
     date: string;
     gDate: string;
-    moment: Moment;
+    dateObj: Date;
 }
 interface IMobileDatePicker {
     onDateChange: (date: IDate) => void;

@@ -4,6 +4,8 @@
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+yarn.lock
+daliry-mobile-date-picker-*.tgz
 node_modules
 .idea
 

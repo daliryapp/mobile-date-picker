@@ -1,6 +1,6 @@
 {
   "name": "daliry-mobile-date-picker",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "packageManager": "yarn@4.10.3",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -14,26 +14,30 @@
   },
   "dependencies": {
     "@alwatr/nano-build": "^5.5.0",
-    "moment-jalaali": "^0.10.4",
+    "date-fns": "^4.4.0",
+    "date-fns-jalali": "^4.4.0-0",
     "react": "^19.2.1",
     "react-dom": "^19.2.1"
   },
   "devDependencies": {
-    "@types/moment-jalaali": "^0.7.9",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "esbuild": "^0.25.1"
   },
   "keywords": [
     "react",
+    "react date picker",
     "mobile date picker",
+    "pwa date picker",
     "jalali date picker",
-    "shamsi calendar",
     "persian date picker",
     "gregorian date picker",
-    "react component",
+    "shamsi calendar",
+    "mobile calendar",
     "birthdate picker",
-    "moment.js"
+    "touch date picker",
+    "date-fns",
+    "date-fns-jalali"
   ],
   "author": "Mahdi Daliry",
   "license": "MIT"
