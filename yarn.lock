@@ -5,14 +5,12 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
-"@alwatr/nano-build@npm:^5.5.0":
-  version: 5.5.0
-  resolution: "@alwatr/nano-build@npm:5.5.0"
-  dependencies:
-    esbuild: "npm:^0.25.0"
+"@alwatr/nano-build@npm:^9.33.1":
+  version: 9.33.1
+  resolution: "@alwatr/nano-build@npm:9.33.1"
   bin:
-    nano-build: ./nano-build.cjs
-  checksum: 10c0/130aa1059b45e32244b14fb5d444c764c821060910266d3fff558e854e1198f59cd589ceba0f28afcee7fd487867815bc090931e8c1e080a94863168519e01b5
+    nano-build: cli.sh
+  checksum: 10c0/4608720014566e1707b91a7f22dab7adf361fe16268342630ba9349e1113972f3f2512db606ce82a8296ba86bc372df5baac440368d88bf60a2199d6d125784b
   languageName: node
   linkType: hard
 
@@ -220,17 +218,15 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "daliry-mobile-date-picker@workspace:."
   dependencies:
-    "@alwatr/nano-build": "npm:^5.5.0"
+    "@alwatr/nano-build": "npm:^9.33.1"
     "@types/react": "npm:^19.0.10"
     "@types/react-dom": "npm:^19.0.4"
     date-fns: "npm:^4.4.0"
     date-fns-jalali: "npm:^4.4.0-0"
     esbuild: "npm:^0.25.1"
-    react: "npm:^19.2.1"
-    react-dom: "npm:^19.2.1"
   peerDependencies:
-    react: ^19.2.1
-    react-dom: ^19.2.1
+    react: ">=18"
+    react-dom: ">=18"
   languageName: unknown
   linkType: soft
 
@@ -248,7 +244,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:^0.25.0, esbuild@npm:^0.25.1":
+"esbuild@npm:^0.25.1":
   version: 0.25.1
   resolution: "esbuild@npm:0.25.1"
   dependencies:
@@ -331,30 +327,5 @@ __metadata:
   bin:
     esbuild: bin/esbuild
   checksum: 10c0/80fca30dd0f21aec23fdfab34f0a8d5f55df5097dd7f475f2ab561d45662c32ee306f5649071cd1a0ba0614b164c48ca3dc3ee1551a4daf204b8af90e4d893f5
-  languageName: node
-  linkType: hard
-
-"react-dom@npm:^19.2.1":
-  version: 19.2.7
-  resolution: "react-dom@npm:19.2.7"
-  dependencies:
-    scheduler: "npm:^0.27.0"
-  peerDependencies:
-    react: ^19.2.7
-  checksum: 10c0/970ff600f6e80d47d39e2f226f12f226173b3cba3382efc97c5f0cd663de9af38c7a4c11c213fb936094faeac83060d660247accaa96b752180d5b951b9cfecb
-  languageName: node
-  linkType: hard
-
-"react@npm:^19.2.1":
-  version: 19.2.7
-  resolution: "react@npm:19.2.7"
-  checksum: 10c0/0bd0e2f1bbd4ba97561c6597bf8a5fec05e6476fe61e165c1065598d16668efc6715205599c94d3ddd49d36cb0f21cbf1b9bcc18ee840b805ce222c3e8d558ac
-  languageName: node
-  linkType: hard
-
-"scheduler@npm:^0.27.0":
-  version: 0.27.0
-  resolution: "scheduler@npm:0.27.0"
-  checksum: 10c0/4f03048cb05a3c8fddc45813052251eca00688f413a3cee236d984a161da28db28ba71bd11e7a3dd02f7af84ab28d39fb311431d3b3772fed557945beb00c452
   languageName: node
   linkType: hard
