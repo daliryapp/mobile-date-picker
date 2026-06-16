@@ -35,6 +35,7 @@ interface IMobileDatePicker {
     backgroundColor?: string;
     textColor?: string;
     selectedColor?: string;
+    value?: Date | string;
 }
 
 const JALALI_MONTHS = ["فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"];
@@ -43,22 +44,72 @@ const GREGORIAN_MONTHS = ["January", "February", "March", "April", "May", "June"
 const ITEM_HEIGHT = 45;
 
 const DaliryMobileDatePicker = ({
-                              onDateChange,
-                              isBirthdate = false,
-                              isGregorian = false,
-                              backgroundColor = "#f5f5f5",
-                              textColor = "#bbb",
-                              selectedColor = "#333",
-                          }: IMobileDatePicker) => {
+                                    onDateChange,
+                                    isBirthdate = false,
+                                    isGregorian = false,
+                                    backgroundColor = "#f5f5f5",
+                                    textColor = "#bbb",
+                                    selectedColor = "#333",
+                                    value,
+                                }: IMobileDatePicker) => {
     const now = useMemo(() => new Date(), []);
 
-    const initialYear = useMemo(() => {
-        const currentYear = isGregorian ? getYear(now) : getJalaliYear(now);
-        return isBirthdate ? currentYear - 18 : currentYear;
-    }, [isGregorian, isBirthdate]);
+    const parseValue = (input?: Date | string): Date | null => {
+        if (!input) return null;
 
-    const initialMonth = isGregorian ? getMonth(now) + 1 : getJalaliMonth(now) + 1;
-    const initialDay = isGregorian ? getDate(now) : getJalaliDate(now);
+        if (input instanceof Date) {
+            return isNaN(input.getTime()) ? null : input;
+        }
+
+        if (isGregorian) {
+            const gDate = new Date(input);
+            return isNaN(gDate.getTime()) ? null : gDate;
+        }
+
+        const normalized = input.replaceAll("-", "/");
+        const parts = normalized.split("/").map(Number);
+
+        if (parts.length !== 3 || parts.some(isNaN)) return null;
+
+        const [year, month, day] = parts;
+        const jDate = newDate(year, month - 1, day);
+
+        return isNaN(jDate.getTime()) ? null : jDate;
+    };
+
+    const parsedValue = useMemo(() => parseValue(value), [value, isGregorian]);
+
+    const baseDate = useMemo(() => {
+        if (parsedValue) return parsedValue;
+
+        if (isBirthdate) {
+            if (isGregorian) {
+                const birthDate = new Date(now);
+                birthDate.setFullYear(birthDate.getFullYear() - 18);
+                return birthDate;
+            }
+
+            return newDate(
+                getJalaliYear(now) - 18,
+                getJalaliMonth(now),
+                getJalaliDate(now)
+            );
+        }
+
+        return now;
+    }, [parsedValue, isBirthdate, isGregorian, now]);
+
+    const initialYear = useMemo(() => {
+        return isGregorian ? getYear(baseDate) : getJalaliYear(baseDate);
+    }, [isGregorian, baseDate]);
+
+    const initialMonth = useMemo(() => {
+        return isGregorian ? getMonth(baseDate) + 1 : getJalaliMonth(baseDate) + 1;
+    }, [isGregorian, baseDate]);
+
+    const initialDay = useMemo(() => {
+        return isGregorian ? getDate(baseDate) : getJalaliDate(baseDate);
+    }, [isGregorian, baseDate]);
 
     const [selectedYear, setSelectedYear] = useState<number>(initialYear);
     const [selectedMonth, setSelectedMonth] = useState<number>(initialMonth);
@@ -78,14 +129,20 @@ const DaliryMobileDatePicker = ({
 
     const daysInMonth = useMemo(() => {
         if (isGregorian) {
-            return  getDaysInMonth(new Date(selectedYear, selectedMonth - 1, 1));
+            return getDaysInMonth(new Date(selectedYear, selectedMonth - 1, 1));
         }
-        return  getJalaliDaysInMonth(newDate(selectedYear, selectedMonth-1, 1));
+        return getJalaliDaysInMonth(newDate(selectedYear, selectedMonth - 1, 1));
     }, [isGregorian, selectedYear, selectedMonth]);
 
     const days = useMemo(() => {
         return Array.from({ length: daysInMonth }, (_, i) => i + 1);
     }, [daysInMonth]);
+
+    useEffect(() => {
+        setSelectedYear(initialYear);
+        setSelectedMonth(initialMonth);
+        setSelectedDay(initialDay);
+    }, [initialYear, initialMonth, initialDay]);
 
     useEffect(() => {
         if (selectedDay > daysInMonth) {
@@ -111,11 +168,10 @@ const DaliryMobileDatePicker = ({
         };
     };
 
-    // پیاده‌سازی Debounce برای ارسال تاریخ
     useEffect(() => {
         const timer = setTimeout(() => {
             onDateChange(buildDateObject(selectedYear, selectedMonth, selectedDay));
-        }, 500); // ۵۰۰ میلی‌ثانیه صبر بعد از آخرین تغییر
+        }, 500);
 
         return () => clearTimeout(timer);
     }, [selectedYear, selectedMonth, selectedDay, isGregorian]);
@@ -138,7 +194,7 @@ const DaliryMobileDatePicker = ({
         }, 0);
 
         return () => window.clearTimeout(timer);
-    }, [years]); // فقط وقتی لیست سال‌ها (تقویم) عوض شد ری‌اسکرول کن
+    }, [years, selectedYear, selectedMonth, selectedDay]);
 
     const handleScroll = (e: UIEvent<HTMLDivElement>, type: "day" | "month" | "year") => {
         const index = Math.round(e.currentTarget.scrollTop / ITEM_HEIGHT);
@@ -155,7 +211,12 @@ const DaliryMobileDatePicker = ({
         }
     };
 
-    const renderList = (items: Array<string | number>, selectedValue: string | number, ref: RefObject<HTMLDivElement | null>, type: "day" | "month" | "year") => {
+    const renderList = (
+        items: Array<string | number>,
+        selectedValue: string | number,
+        ref: RefObject<HTMLDivElement | null>,
+        type: "day" | "month" | "year"
+    ) => {
         return (
             <div className="scroll-list" onScroll={(e) => handleScroll(e, type)} ref={ref}>
                 <div style={{ height: ITEM_HEIGHT }} />

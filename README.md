@@ -3,13 +3,14 @@
 **Daliry Mobile Date Picker** is a mobile-friendly and customizable date picker component for **React** with support for both **Jalali (Shamsi)** and **Gregorian** calendars.  
 It is designed for **mobile apps**, **birthdate pickers**, and any React project that needs a clean, touch-optimized date selection experience.
 
-As of **v1.0.3**, the package has been migrated away from **Moment.js** to **date-fns** and **date-fns-jalali**, resulting in:
+As of **v1.1.3**, the package uses **date-fns** and **date-fns-jalali** and supports passing an initial `value` for both **Jalali** and **Gregorian** modes.
 
 - Better performance
 - Smaller bundle size
 - Native `Date` output instead of Moment objects
+- Initial date selection via `value`
 
-![Daliry Mobile Date Picker Screenshot](https://github.com/daliryapp/mobile-date-picker/blob/master/src/assets/images/daliry-mobile-date-picker102.PNG?raw=true)
+![Daliry Mobile Date Picker Screenshot](https://raw.githubusercontent.com/daliryapp/mobile-date-picker/refs/heads/master/src/assets/images/daliry-mobile-date-picker102.PNG)
 
 ---
 
@@ -33,20 +34,24 @@ If you're looking for a **React mobile date picker** with **Jalali (Shamsi)** an
 - Easy to integrate into any **React project**
 - Returns both formatted and raw date values
 - Uses **date-fns** and **date-fns-jalali**
-- Better performance in **v1.0.3**
-- Reduced bundle size in **v1.0.3**
+- Better performance in **v1.1.3**
+- Reduced bundle size
 - Uses **debounced** `onDateChange` calls for smoother performance
+- Supports initial date via `value`
 - No need for an extra **Apply** button
 
 ---
 
-## ✨ What's New in v1.0.3
+## ✨ What's New in v1.1.3
 
-- Replaced **Moment.js** with **date-fns** and **date-fns-jalali**
-- Improved runtime performance
-- Reduced final bundle size
-- Replaced Moment-based output with native JavaScript `Date`
-- Kept the API simple for Jalali and Gregorian use cases
+- Added `value` prop to set an initial selected date
+- If `value` is provided, the picker shows that exact date
+- If `value` is not provided:
+    - current date is used by default
+    - or **18 years ago** when `isBirthdate` is `true`
+- Supports `value` in both **Gregorian** and **Jalali** modes
+- Uses **date-fns** and **date-fns-jalali**
+- Keeps output as native JavaScript `Date`
 
 ---
 
@@ -60,6 +65,7 @@ If you're looking for a **React mobile date picker** with **Jalali (Shamsi)** an
 - 🎂 Smart birthdate mode with default value set to **18 years ago**
 - 📤 Output includes full date breakdown in multiple formats
 - 🧩 Built with **date-fns** and **date-fns-jalali**
+- 🎯 Supports controlled initial selection using `value`
 
 ---
 
@@ -92,16 +98,85 @@ console.log(value);
 
 ---
 
+## ✨ Usage with `value`
+
+### Jalali example
+
+tsx
+<MobileDatePicker
+  value="1403/04/20"
+  isGregorian={false}
+  onDateChange={(value) => {
+console.log(value);
+  }}
+/>
+
+### Gregorian example
+
+tsx
+<MobileDatePicker
+  value="2024-07-10"
+  isGregorian={true}
+  onDateChange={(value) => {
+console.log(value);
+  }}
+/>
+
+### Using native `Date`
+
+tsx
+<MobileDatePicker
+  value={new Date()}
+  onDateChange={(value) => {
+console.log(value);
+  }}
+/>
+
+---
+
 ## 🛠 Props
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `onDateChange` | `(date: IDate) => void` | Yes | - | Called after the user finishes changing the date |
-| `isBirthdate` | `boolean` | No | `false` | If `true`, default date is set to 18 years ago |
+| `value` | `Date \| string` | No | - | Initial selected date. If provided, it overrides the default current date or birthdate logic |
+| `isBirthdate` | `boolean` | No | `false` | If `true`, default date is set to 18 years ago when `value` is not provided |
 | `isGregorian` | `boolean` | No | `false` | Switches calendar mode to Gregorian |
 | `backgroundColor` | `string` | No | `#f5f5f5` | Background color of picker |
 | `textColor` | `string` | No | `#bbb` | Color of non-selected items |
 | `selectedColor` | `string` | No | `#333` | Color of selected item |
+
+---
+
+## 📝 `value` Format Notes
+
+The `value` prop supports both `Date` and `string`.
+
+### If `isGregorian={true}`
+You can pass:
+
+- a native `Date`
+- a Gregorian date string such as:
+
+ts
+"2024-07-10"
+
+### If `isGregorian={false}`
+You can pass:
+
+- a native `Date`
+- a Jalali date string such as:
+
+ts
+"1403/04/20"
+
+or
+
+ts
+"1403-04-20"
+
+> If `value` is provided, the picker always uses that value first.  
+> If `value` is missing, it falls back to the current date, or **18 years ago** in birthdate mode.
 
 ---
 
@@ -142,7 +217,7 @@ ts
 
 ## 🔄 Migration Guide
 
-If you are upgrading to **v1.0.3**, note that **Moment.js has been removed** from the output.
+If you are upgrading from older versions, note that **Moment.js has been removed** from the output.
 
 ### Before
 
@@ -196,7 +271,8 @@ console.log(format(value.dateObj, "yyyy-MM-dd"));
 
 - Supports both **Jalali** and **Gregorian** calendars
 - Built using **date-fns** and **date-fns-jalali**
-- Improved performance and reduced bundle size in **v1.0.3**
+- Supports initial value via `value`
+- Improved performance and reduced bundle size
 - Make sure to import the CSS file:
 
 tsx
@@ -210,7 +286,6 @@ import "daliry-mobile-date-picker/dist/index.css";
 ## 📜 Keywords
 
 react, react date picker, mobile date picker, pwa date picker, jalali date picker, persian date picker, gregorian date picker, shamsi calendar, mobile calendar, birthdate picker, touch date picker, date-fns, date-fns-jalali
-
 
 ---
 

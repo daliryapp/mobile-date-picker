@@ -3385,15 +3385,52 @@ var DaliryMobileDatePicker = ({
   isGregorian = false,
   backgroundColor = "#f5f5f5",
   textColor = "#bbb",
-  selectedColor = "#333"
+  selectedColor = "#333",
+  value
 }) => {
   const now = useMemo(() => /* @__PURE__ */ new Date(), []);
+  const parseValue = (input) => {
+    if (!input) return null;
+    if (input instanceof Date) {
+      return isNaN(input.getTime()) ? null : input;
+    }
+    if (isGregorian) {
+      const gDate = new Date(input);
+      return isNaN(gDate.getTime()) ? null : gDate;
+    }
+    const normalized = input.replaceAll("-", "/");
+    const parts = normalized.split("/").map(Number);
+    if (parts.length !== 3 || parts.some(isNaN)) return null;
+    const [year, month, day] = parts;
+    const jDate = newDate2(year, month - 1, day);
+    return isNaN(jDate.getTime()) ? null : jDate;
+  };
+  const parsedValue = useMemo(() => parseValue(value), [value, isGregorian]);
+  const baseDate = useMemo(() => {
+    if (parsedValue) return parsedValue;
+    if (isBirthdate) {
+      if (isGregorian) {
+        const birthDate = new Date(now);
+        birthDate.setFullYear(birthDate.getFullYear() - 18);
+        return birthDate;
+      }
+      return newDate2(
+        getYear2(now) - 18,
+        getMonth3(now),
+        getDate3(now)
+      );
+    }
+    return now;
+  }, [parsedValue, isBirthdate, isGregorian, now]);
   const initialYear = useMemo(() => {
-    const currentYear = isGregorian ? getYear(now) : getYear2(now);
-    return isBirthdate ? currentYear - 18 : currentYear;
-  }, [isGregorian, isBirthdate]);
-  const initialMonth = isGregorian ? getMonth(now) + 1 : getMonth3(now) + 1;
-  const initialDay = isGregorian ? getDate(now) : getDate3(now);
+    return isGregorian ? getYear(baseDate) : getYear2(baseDate);
+  }, [isGregorian, baseDate]);
+  const initialMonth = useMemo(() => {
+    return isGregorian ? getMonth(baseDate) + 1 : getMonth3(baseDate) + 1;
+  }, [isGregorian, baseDate]);
+  const initialDay = useMemo(() => {
+    return isGregorian ? getDate(baseDate) : getDate3(baseDate);
+  }, [isGregorian, baseDate]);
   const [selectedYear, setSelectedYear] = useState(initialYear);
   const [selectedMonth, setSelectedMonth] = useState(initialMonth);
   const [selectedDay, setSelectedDay] = useState(initialDay);
@@ -3415,6 +3452,11 @@ var DaliryMobileDatePicker = ({
   const days = useMemo(() => {
     return Array.from({ length: daysInMonth }, (_, i) => i + 1);
   }, [daysInMonth]);
+  useEffect(() => {
+    setSelectedYear(initialYear);
+    setSelectedMonth(initialMonth);
+    setSelectedDay(initialDay);
+  }, [initialYear, initialMonth, initialDay]);
   useEffect(() => {
     if (selectedDay > daysInMonth) {
       setSelectedDay(daysInMonth);
@@ -3453,7 +3495,7 @@ var DaliryMobileDatePicker = ({
       scrollToIndex(yearRef, yearIndex);
     }, 0);
     return () => window.clearTimeout(timer);
-  }, [years]);
+  }, [years, selectedYear, selectedMonth, selectedDay]);
   const handleScroll = (e, type) => {
     const index = Math.round(e.currentTarget.scrollTop / ITEM_HEIGHT);
     if (type === "day") {

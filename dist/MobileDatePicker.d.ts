@@ -15,6 +15,7 @@ interface IMobileDatePicker {
     backgroundColor?: string;
     textColor?: string;
     selectedColor?: string;
+    value?: Date | string;
 }
-declare const DaliryMobileDatePicker: ({ onDateChange, isBirthdate, isGregorian, backgroundColor, textColor, selectedColor, }: IMobileDatePicker) => import("react/jsx-runtime").JSX.Element;
+declare const DaliryMobileDatePicker: ({ onDateChange, isBirthdate, isGregorian, backgroundColor, textColor, selectedColor, value, }: IMobileDatePicker) => import("react/jsx-runtime").JSX.Element;
 export default DaliryMobileDatePicker;
